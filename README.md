@@ -1,4 +1,4 @@
-Mul
+MultimediaProject
 ===
 
 Kinect comparison...
