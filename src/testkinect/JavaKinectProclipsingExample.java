@@ -60,13 +60,38 @@ public class JavaKinectProclipsingExample extends PApplet {
 		
 		PVector torso = getJoint(userId, SimpleOpenNI.SKEL_TORSO);
 		PVector leftShoulder = this.skeleton.getProportionedLeftShoulder(context, userId);
+		PVector leftElbow = this.skeleton.getProportionedLeftElbow(context, userId);
+		PVector leftHand = this.skeleton.getProportionedLeftHand(context, userId);
+		PVector leftHip = this.skeleton.getProportionedLeftHip(context, userId);
+		PVector leftKnee = this.skeleton.getProportionedLeftKnee(context, userId);
+		PVector leftFoot = this.skeleton.getProportionedLeftFoot(context, userId);
+
 		PVector rightShoulder = this.skeleton.getProportionedRightShoulder(context, userId);
+		PVector rightElbow = this.skeleton.getProportionedRightElbow(context, userId);
+		PVector rightHand = this.skeleton.getProportionedRightHand(context, userId);
+		PVector rightHip = this.skeleton.getProportionedRightHip(context, userId);
+		PVector rightKnee = this.skeleton.getProportionedRightKnee(context, userId);
+		PVector rightFoot = this.skeleton.getProportionedRightFoot(context, userId);
 		
-		if (leftShoulder != null && torso != null && rightShoulder != null) {
+		if (leftShoulder != null && torso != null && rightShoulder != null && leftElbow != null && leftHand != null && leftHip != null 
+				&& leftKnee != null && leftFoot != null && rightElbow != null && rightHand != null && rightHip != null 
+				&& rightKnee != null && rightFoot != null  ) {
 			stroke(204, 102, 0);
 			strokeWeight(10);
 			line(torso.x, torso.y, leftShoulder.x, leftShoulder.y);
+			line(torso.x, torso.y, leftElbow.x, leftElbow.y);
+			line(torso.x, torso.y, leftHand.x, leftHand.y);
+			line(torso.x, torso.y, leftHip.x, leftHip.y);
+			line(torso.x, torso.y, leftKnee.x, leftKnee.y);
+			line(torso.x, torso.y, leftFoot.x, leftFoot.y);
+
 			line(torso.x, torso.y, rightShoulder.x, rightShoulder.y);
+			line(torso.x, torso.y, rightElbow.x, rightElbow.y);
+			line(torso.x, torso.y, rightHand.x, rightHand.y);
+			line(torso.x, torso.y, rightHip.x, rightHip.y);
+			line(torso.x, torso.y, rightKnee.x, rightKnee.y);
+			line(torso.x, torso.y, rightFoot.x, rightFoot.y);
+
 			System.out.println("Drawing last skeleton is working");
 		}
 		else {
