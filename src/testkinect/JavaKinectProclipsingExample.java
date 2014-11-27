@@ -37,10 +37,9 @@ public class JavaKinectProclipsingExample extends PApplet {
 			// check if the skeleton is being tracked
 			if (context.isTrackingSkeleton(i)) {
 //				drawSkeleton(i);
-				
-				if (System.currentTimeMillis() - time >= 1000) {
+				drawLastSkeleton(i);
+				if (System.currentTimeMillis() - time >= 5000) {
 					System.out.println("in!!!");
-					drawLastSkeleton(i);
 					this.skeleton.saveSekeleton(context);
 					this.time = System.currentTimeMillis();
 				}
