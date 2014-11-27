@@ -1,5 +1,10 @@
 package testkinect;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+
 import processing.core.PApplet;
 import processing.core.PVector;
 import SimpleOpenNI.SimpleOpenNI;
@@ -8,7 +13,8 @@ public class ModelInputPApplet extends PApplet {
 	SimpleOpenNI context;
 	SkeletonOrientations skeleton = new SkeletonOrientations();
 	long time = System.currentTimeMillis();
-
+	ArrayList<String> inputData = new ArrayList<String>();
+	
 	public void setup() {
 
 		size(300, 300);
@@ -44,9 +50,11 @@ public class ModelInputPApplet extends PApplet {
 			// check if the skeleton is being tracked
 			if (context.isTrackingSkeleton(i)) {
 				drawSkeleton(i);
-				if (System.currentTimeMillis() - time >= 5000) {
+				if (System.currentTimeMillis() - time >= 100) {
 					System.out.println("Saving model!!!");
 					this.skeleton.saveSekeleton(context);
+					System.out.print(skeleton.toString());
+					inputData.add(this.skeleton.toDataEntry());
 					this.time = System.currentTimeMillis();
 				}
 			}
@@ -130,7 +138,20 @@ public class ModelInputPApplet extends PApplet {
 	
 	@Override
 	public void destroy() {
+		//write skeleton to file.
+
+		try {
+			BufferedWriter wt = new BufferedWriter(new FileWriter("inputData"));
+			for(int i = 0; i < inputData.size(); i++) {
+				wt.write(inputData.get(i));
+				wt.flush();
+			}
+			wt.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		super.destroy();
+
 		System.out.println("Destroying model!");
 		// TODO write skeleton to file.
 	}

@@ -1,4 +1,11 @@
+
 package testkinect;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import processing.core.PApplet;
 import processing.core.PVector;
@@ -8,13 +15,21 @@ public class ComparisonPApplet extends PApplet {
 	SimpleOpenNI context;
 	SkeletonOrientations skeleton = new SkeletonOrientations();
 	long time = System.currentTimeMillis();
-
+	ArrayList<String> readData = new ArrayList<String>();
+	int count = 0;
 	public void setup() {
 
 		// TODO read model skeleton from a file
-		
-		size(300, 300);
-		
+		try {
+			BufferedReader br = new BufferedReader(new FileReader("inputData"));
+			String inputData;
+			while((inputData = br.readLine()) != null) {
+				readData.add(inputData);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		context = new SimpleOpenNI(this);
 
 		// enable depthMap generation
@@ -38,9 +53,14 @@ public class ComparisonPApplet extends PApplet {
 			// check if the skeleton is being tracked
 			if (context.isTrackingSkeleton(i)) {
 				drawSkeleton(i);
+				drawLastSkeleton(i);
 				if (System.currentTimeMillis() - time >= 5000) {
 					System.out.println("in!!!");
-					drawLastSkeleton(i);  // TODO just draw skeleton here!
+					if(count < readData.size()){
+						skeleton.fromInputData(readData.get(count));
+						
+						count++;
+					}
 					this.time = System.currentTimeMillis();
 				}
 			}
