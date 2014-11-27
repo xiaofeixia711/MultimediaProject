@@ -36,7 +36,7 @@ public class JavaKinectProclipsingExample extends PApplet {
 		for (i = 0; i <= 10; i++) {
 			// check if the skeleton is being tracked
 			if (context.isTrackingSkeleton(i)) {
-//				drawSkeleton(i);
+				drawSkeleton(i);
 				drawLastSkeleton(i);
 				if (System.currentTimeMillis() - time >= 5000) {
 					System.out.println("in!!!");
@@ -59,6 +59,10 @@ public class JavaKinectProclipsingExample extends PApplet {
 		System.out.println("In Drawing last skeleton -- ");
 		
 		PVector torso = getJoint(userId, SimpleOpenNI.SKEL_TORSO);
+		
+		PVector neck = this.skeleton.getProportionedNeck(context, userId);
+		PVector head = this.skeleton.getProportionedHead(context, userId);
+		
 		PVector leftShoulder = this.skeleton.getProportionedLeftShoulder(context, userId);
 		PVector leftElbow = this.skeleton.getProportionedLeftElbow(context, userId);
 		PVector leftHand = this.skeleton.getProportionedLeftHand(context, userId);
@@ -73,31 +77,41 @@ public class JavaKinectProclipsingExample extends PApplet {
 		PVector rightKnee = this.skeleton.getProportionedRightKnee(context, userId);
 		PVector rightFoot = this.skeleton.getProportionedRightFoot(context, userId);
 		
-		if (leftShoulder != null && torso != null && rightShoulder != null && leftElbow != null && leftHand != null && leftHip != null 
-				&& leftKnee != null && leftFoot != null && rightElbow != null && rightHand != null && rightHip != null 
-				&& rightKnee != null && rightFoot != null  ) {
-			stroke(204, 102, 0);
-			strokeWeight(10);
-			line(torso.x, torso.y, leftShoulder.x, leftShoulder.y);
-			line(torso.x, torso.y, leftElbow.x, leftElbow.y);
-			line(torso.x, torso.y, leftHand.x, leftHand.y);
-			line(torso.x, torso.y, leftHip.x, leftHip.y);
-			line(torso.x, torso.y, leftKnee.x, leftKnee.y);
-			line(torso.x, torso.y, leftFoot.x, leftFoot.y);
-
-			line(torso.x, torso.y, rightShoulder.x, rightShoulder.y);
-			line(torso.x, torso.y, rightElbow.x, rightElbow.y);
-			line(torso.x, torso.y, rightHand.x, rightHand.y);
-			line(torso.x, torso.y, rightHip.x, rightHip.y);
-			line(torso.x, torso.y, rightKnee.x, rightKnee.y);
-			line(torso.x, torso.y, rightFoot.x, rightFoot.y);
-
-			System.out.println("Drawing last skeleton is working");
-		}
-		else {
-			System.out.println("### Drawing last skeleton is not working ###");
-		}
+		stroke(204, 102, 0);
+		strokeWeight(10);
+		drawLimb(torso, neck);
+		drawLimb(neck, head);
 		
+		drawLimb(torso, leftShoulder);
+		drawLimb(leftShoulder, leftElbow);
+		drawLimb(leftElbow, leftHand);
+		drawLimb(torso, leftHip);
+		drawLimb(leftHip, leftKnee);
+		drawLimb(leftKnee, leftFoot);
+
+		drawLimb(torso, rightShoulder);
+		drawLimb(rightShoulder, rightElbow);
+		drawLimb(rightElbow, rightHand);
+		drawLimb(torso, rightHip);
+		drawLimb(rightHip, rightKnee);
+		drawLimb(rightKnee, rightFoot);
+		
+//		if (neck != null && head != null && leftShoulder != null && torso != null && rightShoulder != null && leftElbow != null && leftHand != null && leftHip != null 
+//				&& leftKnee != null && leftFoot != null && rightElbow != null && rightHand != null && rightHip != null 
+//				&& rightKnee != null && rightFoot != null) {
+//			
+//
+//			System.out.println("Drawing last skeleton is working");
+//		}
+//		else {
+//			System.out.println("### Drawing last skeleton is not working ###");
+//		}
+	}
+	
+	private void drawLimb(PVector p1, PVector p2) {
+		if (p1 != null && p2 != null) {
+			line(p1.x, p1.y, p2.x, p2.y);
+		}
 	}
 	
 	private PVector getJoint(int userId, int jointID) {
