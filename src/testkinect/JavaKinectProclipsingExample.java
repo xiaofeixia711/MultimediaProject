@@ -1,5 +1,10 @@
 package testkinect;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+
 import processing.core.PApplet;
 import processing.core.PVector;
 import SimpleOpenNI.SimpleOpenNI;
@@ -9,7 +14,9 @@ public class JavaKinectProclipsingExample extends PApplet {
 	SimpleOpenNI context;
 	SkeletonOrientations skeleton = new SkeletonOrientations();
 	long time = System.currentTimeMillis();
-
+	ArrayList<String> trainingData = new ArrayList<String>();//This is not used. For now. 
+	static BufferedWriter wt_train;
+	
 	public void setup() {
 
 		context = new SimpleOpenNI(this);
@@ -41,6 +48,13 @@ public class JavaKinectProclipsingExample extends PApplet {
 				if (System.currentTimeMillis() - time >= 5000) {
 					System.out.println("in!!!");
 					this.skeleton.saveSekeleton(context);
+					try {
+						wt_train.write(this.skeleton.toString());
+						wt_train.flush();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					this.time = System.currentTimeMillis();
 				}
 //				try {
@@ -259,6 +273,12 @@ public class JavaKinectProclipsingExample extends PApplet {
 		PVector vect2 = new PVector();
 		vect2.set(1, 0);
 		System.out.println(PVector.sub(vect1, vect2).heading());
+		try {
+			wt_train = new BufferedWriter(new FileWriter("trainingData", true));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
 	}
 	
 }

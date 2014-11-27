@@ -1,5 +1,6 @@
 package testkinect;
 
+
 import java.util.HashMap;
 
 import processing.core.PVector;
@@ -11,6 +12,17 @@ public class SkeletonOrientations {
 	
 	public SkeletonOrientations() {
 		this.directions = new HashMap<Integer, PVector>();
+	}
+	
+	@Override
+	public String toString() {
+		String data = new String();
+		for(int i = 0; i < directions.size(); i++) {
+			PVector bodyPart = directions.get(i);
+			data += bodyPart.x + "," + bodyPart.y + "," + bodyPart.z;
+		}
+		data += "\t";
+		return data;
 	}
 	
 	public void saveSekeleton(SimpleOpenNI context) {
