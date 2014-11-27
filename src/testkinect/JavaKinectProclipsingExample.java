@@ -61,6 +61,12 @@ public class JavaKinectProclipsingExample extends PApplet {
 		
 		PVector torso = getJoint(userId, SimpleOpenNI.SKEL_TORSO);
 		PVector leftShoulder = this.skeleton.getProportionedLeftShoulder(context, userId);
+		PVector leftElbow = this.skeleton.getProportionedLeftElbow(context, userId);
+		PVector leftHand = this.skeleton.getProportionedLeftHand(context, userId);
+		PVector leftHip = this.skeleton.getProportionedLeftHip(context, userId);
+		PVector leftKnee = this.skeleton.getProportionedLeftKnee(context, userId);
+		PVector leftFoot = this.skeleton.getProportionedLeftFoot(context, userId);
+
 		PVector rightShoulder = this.skeleton.getProportionedRightShoulder(context, userId);
 		
 		if (leftShoulder != null && torso != null && rightShoulder != null) {
