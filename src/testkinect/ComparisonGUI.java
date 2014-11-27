@@ -19,8 +19,8 @@ public class ComparisonGUI extends Applet implements ActionListener {
 	Button stopButton;
 	Label placeholder;
 	Panel displayPanel;
-	ModelInputPApplet modelApplet;
-	ComparisonPApplet comparisonApplet;
+	ModelInputPApplet modelApplet = null;
+	ComparisonPApplet comparisonApplet = null;
 	State state;
 	
 	enum State {MODELING, CALIBRATING, STOP};
@@ -54,45 +54,72 @@ public class ComparisonGUI extends Applet implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == calibrateButton) {
-			displayPanel.removeAll();
-			comparisonApplet = new ComparisonPApplet();
-			displayPanel.add(comparisonApplet);
-			// important to call this whenever embedding a PApplet.
-	        // It ensures that the animation thread is started and
-	        // that other internal variables are properly set.
-			comparisonApplet.init();
+			clearDisplayPanel();
+			if (comparisonApplet == null) {
+				System.out.println("initiating!");
+				comparisonApplet = new ComparisonPApplet();
+				if (comparisonApplet == null) {
+					System.out.println("null pointer!");
+				}
+				displayPanel.add(comparisonApplet);
+				// important to call this whenever embedding a PApplet.
+		        // It ensures that the animation thread is started and
+		        // that other internal variables are properly set.
+				comparisonApplet.init();
+			}
+			else {
+
+				System.out.println("Resuming!");
+				comparisonApplet.draw();
+			}
 			state = State.CALIBRATING;
 			playAudio();
 			validate();
 		}
 
 		if (e.getSource() == modelButton) {
-			loopAudio();
-			displayPanel.removeAll();
-			modelApplet = new ModelInputPApplet();
-			displayPanel.add(modelApplet);
-			modelApplet.init();
+			clearDisplayPanel();
+			if (modelApplet == null) {
+				System.out.println("initiating!");
+				modelApplet = new ModelInputPApplet();
+				displayPanel.add(modelApplet);
+				modelApplet.init();
+				this.getAppletContext().showDocument( this.getDocumentBase() );
+			}
+			else {
+				System.out.println("Resuming!");
+				modelApplet.start();
+			}
 			state = State.MODELING;
 			playAudio();
 			validate();
 		}
 
 		if (e.getSource() == stopButton) {
-			if (state == State.CALIBRATING) {
-				comparisonApplet.destroy();
-				displayPanel.remove(comparisonApplet);
-				displayPanel.add(placeholder);
-			}
-			else if (state == State.MODELING) {
-				modelApplet.destroy();
-				displayPanel.remove(modelApplet);
-				displayPanel.add(placeholder);
-			}
+			clearDisplayPanel();
+			displayPanel.add(placeholder);
 			
 			state = State.STOP;
 			stopAudio();
 			validate();
 		}
+	}
+	
+	private void clearDisplayPanel() {
+		if (state == State.MODELING) {
+			modelApplet.destroy();
+			modelApplet = null;
+//			applet.getAppletContext().showDocument(appletCloseURL);
+		}
+		else if (state == State.CALIBRATING) {
+			comparisonApplet.stop();
+			comparisonApplet = null;
+		}
+		else {
+			displayPanel.removeAll();
+		}
+		displayPanel.removeAll();
+		validate();
 	}
 
 	private void playAudio() {

@@ -13,6 +13,8 @@ public class ComparisonPApplet extends PApplet {
 
 		// TODO read model skeleton from a file
 		
+		size(300, 300);
+		
 		context = new SimpleOpenNI(this);
 
 		// enable depthMap generation
@@ -23,7 +25,7 @@ public class ComparisonPApplet extends PApplet {
 		// enable skeleton generation for all joints
 		context.enableUser(SimpleOpenNI.SKEL_PROFILE_ALL);
 
-		size(context.depthWidth(), context.depthHeight());
+//		size(context.depthWidth(), context.depthHeight());
 	}
 
 	public void draw() {

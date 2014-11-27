@@ -11,7 +11,13 @@ public class ModelInputPApplet extends PApplet {
 
 	public void setup() {
 
+		size(300, 300);
+		
 		context = new SimpleOpenNI(this);
+		
+		if (context == null) {
+			System.out.println("Context null...");
+		}
 
 		// enable depthMap generation
 		context.enableDepth();
@@ -20,12 +26,16 @@ public class ModelInputPApplet extends PApplet {
 
 		// enable skeleton generation for all joints
 		context.enableUser(SimpleOpenNI.SKEL_PROFILE_ALL);
-
-		size(context.depthWidth(), context.depthHeight());
+		
+//		size(context.depthWidth(), context.depthHeight());
 	}
 
 	public void draw() {
 		context.update();
+//		System.out.println("context: " + context);
+		if (context == null || context.depthImage() == null) {
+			return;
+		}
 		image(context.depthImage(),0,0);
 
 		int i = 0;
@@ -121,7 +131,7 @@ public class ModelInputPApplet extends PApplet {
 	@Override
 	public void destroy() {
 		super.destroy();
-		
+		System.out.println("Destroying model!");
 		// TODO write skeleton to file.
 	}
 }
