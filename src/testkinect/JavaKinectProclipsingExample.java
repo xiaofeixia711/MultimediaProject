@@ -24,16 +24,15 @@ public class JavaKinectProclipsingExample extends PApplet {
 		context.enableUser(SimpleOpenNI.SKEL_PROFILE_ALL);
 
 		size(context.depthWidth(), context.depthHeight());
-		
 	}
 
 	public void draw() {
 		context.update();
 		image(context.depthImage(),0,0);
 
-		int i;
+		int i = 0;
 		
-		for (i = 0; i <= 10; i++) {
+//		for (i = 0; i <= 10; i++) {
 			// check if the skeleton is being tracked
 			if (context.isTrackingSkeleton(i)) {
 				drawSkeleton(i);
@@ -51,7 +50,7 @@ public class JavaKinectProclipsingExample extends PApplet {
 //				}
 //				updateSkelPos(i);
 			}
-		}
+//		}
 		
 	}
 	
@@ -133,8 +132,6 @@ public class JavaKinectProclipsingExample extends PApplet {
 
 	public void updateSkelPos(int userId) {
 		// get 3D position of a joint
-		stroke(0, 204, 102);
-		strokeWeight(4);
 		PVector positionReelPartieDuCorps = new PVector();
 		PVector positionPartieDuCorps = new PVector();
 
@@ -147,11 +144,12 @@ public class JavaKinectProclipsingExample extends PApplet {
 		System.out.println("Head: x=" + (context.depthWidth()
 				- positionPartieDuCorps.x) + " y=" + positionPartieDuCorps.y
 				+ " z=" + positionPartieDuCorps.z);
-
 	}
 
 	// draw the skeleton with the selected joints
 	public void drawSkeleton(int userId) {
+		stroke(0, 204, 102);
+		strokeWeight(4);
 		
 		// draw limbs
 		context.drawLimb(userId, SimpleOpenNI.SKEL_HEAD, SimpleOpenNI.SKEL_NECK);
