@@ -16,24 +16,21 @@ public class ModelInputPApplet extends PApplet {
 	ArrayList<String> inputData = new ArrayList<String>();
 	
 	public void setup() {
-
-		size(300, 300);
 		
 		context = new SimpleOpenNI(this);
-		
-		if (context == null) {
-			System.out.println("Context null...");
-		}
+		System.out.println("Context test...");
 
 		// enable depthMap generation
 		context.enableDepth();
 		
-		context.setMirror(true);// ???
+		context.setMirror(true);
+		
+		context.enableRGB();
 
 		// enable skeleton generation for all joints
 		context.enableUser(SimpleOpenNI.SKEL_PROFILE_ALL);
 		
-//		size(context.depthWidth(), context.depthHeight());
+		size(context.depthWidth(), context.depthHeight());
 	}
 
 	public void draw() {
@@ -139,7 +136,6 @@ public class ModelInputPApplet extends PApplet {
 	@Override
 	public void destroy() {
 		//write skeleton to file.
-
 		try {
 			BufferedWriter wt = new BufferedWriter(new FileWriter("inputData"));
 			for(int i = 0; i < inputData.size(); i++) {
@@ -150,9 +146,7 @@ public class ModelInputPApplet extends PApplet {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		context.close();
 		super.destroy();
-
-		System.out.println("Destroying model!");
-		// TODO write skeleton to file.
 	}
 }

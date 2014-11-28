@@ -248,11 +248,10 @@ public class SkeletonOrientations {
 		}
 	}
 
-	public PVector getProportionedHead(SimpleOpenNI context, int userId) {
+	public PVector getProportionedHead(SimpleOpenNI context, int userId, PVector neck) {
 		if (context.isTrackingSkeleton(userId) && this.directions.containsKey(SimpleOpenNI.SKEL_HEAD)) {
-			PVector neck = getProjectedPVector(context, userId, SimpleOpenNI.SKEL_NECK);
 			PVector head = getProjectedPVector(context, userId, SimpleOpenNI.SKEL_HEAD);
-			PVector difference = PVector.sub(head, neck);
+			PVector difference = PVector.sub(head, getProjectedPVector(context, userId, SimpleOpenNI.SKEL_NECK));
 
 			return PVector.add(neck, PVector.mult(this.directions.get(SimpleOpenNI.SKEL_HEAD), difference.mag()));
 		}
@@ -261,11 +260,10 @@ public class SkeletonOrientations {
 		}
 	}
 
-	public PVector getProportionedLeftElbow(SimpleOpenNI context, int userId) {
+	public PVector getProportionedLeftElbow(SimpleOpenNI context, int userId, PVector left_shoulder) {
 		if (context.isTrackingSkeleton(userId) && this.directions.containsKey(SimpleOpenNI.SKEL_LEFT_ELBOW)) {
-			PVector left_shoulder = getProjectedPVector(context, userId, SimpleOpenNI.SKEL_LEFT_SHOULDER);
 			PVector left_elbow = getProjectedPVector(context, userId, SimpleOpenNI.SKEL_LEFT_ELBOW);
-			PVector difference = PVector.sub(left_elbow, left_shoulder);
+			PVector difference = PVector.sub(left_elbow, getProjectedPVector(context, userId, SimpleOpenNI.SKEL_LEFT_SHOULDER));
 
 			return PVector.add(left_shoulder, PVector.mult(this.directions.get(SimpleOpenNI.SKEL_LEFT_ELBOW), difference.mag()));
 		}
@@ -273,11 +271,11 @@ public class SkeletonOrientations {
 			return null;
 		}
 	}
-	public PVector getProportionedLeftHand(SimpleOpenNI context, int userId) {
+	
+	public PVector getProportionedLeftHand(SimpleOpenNI context, int userId, PVector left_elbow) {
 		if (context.isTrackingSkeleton(userId) && this.directions.containsKey(SimpleOpenNI.SKEL_LEFT_HAND)) {
-			PVector left_elbow = getProjectedPVector(context, userId, SimpleOpenNI.SKEL_LEFT_ELBOW);
 			PVector left_hand = getProjectedPVector(context, userId, SimpleOpenNI.SKEL_LEFT_HAND);
-			PVector difference = PVector.sub(left_hand, left_elbow);
+			PVector difference = PVector.sub(left_hand, getProjectedPVector(context, userId, SimpleOpenNI.SKEL_LEFT_ELBOW));
 
 			return PVector.add(left_elbow, PVector.mult(this.directions.get(SimpleOpenNI.SKEL_LEFT_HAND), difference.mag()));
 		}
@@ -285,6 +283,7 @@ public class SkeletonOrientations {
 			return null;
 		}
 	}
+	
 	public PVector getProportionedLeftHip(SimpleOpenNI context, int userId) {
 		if (context.isTrackingSkeleton(userId) && this.directions.containsKey(SimpleOpenNI.SKEL_LEFT_HIP)) {
 			PVector torso = getProjectedPVector(context, userId, SimpleOpenNI.SKEL_TORSO);
@@ -297,11 +296,11 @@ public class SkeletonOrientations {
 			return null;
 		}
 	}
-	public PVector getProportionedLeftKnee(SimpleOpenNI context, int userId) {
+	
+	public PVector getProportionedLeftKnee(SimpleOpenNI context, int userId, PVector left_hip) {
 		if (context.isTrackingSkeleton(userId) && this.directions.containsKey(SimpleOpenNI.SKEL_LEFT_KNEE)) {
-			PVector left_hip = getProjectedPVector(context, userId, SimpleOpenNI.SKEL_LEFT_HIP);
 			PVector left_knee = getProjectedPVector(context, userId, SimpleOpenNI.SKEL_LEFT_KNEE);
-			PVector difference = PVector.sub(left_knee, left_hip);
+			PVector difference = PVector.sub(left_knee, getProjectedPVector(context, userId, SimpleOpenNI.SKEL_LEFT_HIP));
 
 			return PVector.add(left_hip, PVector.mult(this.directions.get(SimpleOpenNI.SKEL_LEFT_KNEE), difference.mag()));
 		}
@@ -309,11 +308,11 @@ public class SkeletonOrientations {
 			return null;
 		}
 	}
-	public PVector getProportionedLeftFoot(SimpleOpenNI context, int userId) {
+	
+	public PVector getProportionedLeftFoot(SimpleOpenNI context, int userId, PVector left_knee) {
 		if (context.isTrackingSkeleton(userId) && this.directions.containsKey(SimpleOpenNI.SKEL_LEFT_FOOT)) {
-			PVector left_knee = getProjectedPVector(context, userId, SimpleOpenNI.SKEL_LEFT_KNEE);
 			PVector left_foot = getProjectedPVector(context, userId, SimpleOpenNI.SKEL_LEFT_FOOT);
-			PVector difference = PVector.sub(left_foot, left_knee);
+			PVector difference = PVector.sub(left_foot, getProjectedPVector(context, userId, SimpleOpenNI.SKEL_LEFT_KNEE));
 
 			return PVector.add(left_knee, PVector.mult(this.directions.get(SimpleOpenNI.SKEL_LEFT_FOOT), difference.mag()));
 		}
@@ -334,6 +333,7 @@ public class SkeletonOrientations {
 			return null;
 		}
 	}
+	
 	public PVector getProportionedRightShoulder(SimpleOpenNI context, int userId) {
 		if (context.isTrackingSkeleton(userId) && this.directions.containsKey(SimpleOpenNI.SKEL_RIGHT_SHOULDER)) {
 			PVector torso = getProjectedPVector(context, userId, SimpleOpenNI.SKEL_TORSO);
@@ -347,11 +347,10 @@ public class SkeletonOrientations {
 		}
 	}
 
-	public PVector getProportionedRightElbow(SimpleOpenNI context, int userId) {
+	public PVector getProportionedRightElbow(SimpleOpenNI context, int userId, PVector right_shoulder) {
 		if (context.isTrackingSkeleton(userId) && this.directions.containsKey(SimpleOpenNI.SKEL_RIGHT_ELBOW)) {
-			PVector right_shoulder = getProjectedPVector(context, userId, SimpleOpenNI.SKEL_RIGHT_SHOULDER);
 			PVector right_elbow = getProjectedPVector(context, userId, SimpleOpenNI.SKEL_RIGHT_ELBOW);
-			PVector difference = PVector.sub(right_elbow, right_shoulder);
+			PVector difference = PVector.sub(right_elbow, getProjectedPVector(context, userId, SimpleOpenNI.SKEL_RIGHT_SHOULDER));
 
 			return PVector.add(right_shoulder, PVector.mult(this.directions.get(SimpleOpenNI.SKEL_RIGHT_ELBOW), difference.mag()));
 		}
@@ -359,11 +358,11 @@ public class SkeletonOrientations {
 			return null;
 		}
 	}
-	public PVector getProportionedRightHand(SimpleOpenNI context, int userId) {
+	
+	public PVector getProportionedRightHand(SimpleOpenNI context, int userId, PVector right_elbow) {
 		if (context.isTrackingSkeleton(userId) && this.directions.containsKey(SimpleOpenNI.SKEL_RIGHT_HAND)) {
-			PVector right_elbow = getProjectedPVector(context, userId, SimpleOpenNI.SKEL_RIGHT_ELBOW);
 			PVector right_hand = getProjectedPVector(context, userId, SimpleOpenNI.SKEL_RIGHT_HAND);
-			PVector difference = PVector.sub(right_hand, right_elbow);
+			PVector difference = PVector.sub(right_hand, getProjectedPVector(context, userId, SimpleOpenNI.SKEL_RIGHT_ELBOW));
 
 			return PVector.add(right_elbow, PVector.mult(this.directions.get(SimpleOpenNI.SKEL_RIGHT_HAND), difference.mag()));
 		}
@@ -371,6 +370,7 @@ public class SkeletonOrientations {
 			return null;
 		}
 	}
+	
 	public PVector getProportionedRightHip(SimpleOpenNI context, int userId) {
 		if (context.isTrackingSkeleton(userId) && this.directions.containsKey(SimpleOpenNI.SKEL_RIGHT_HIP)) {
 			PVector torso = getProjectedPVector(context, userId, SimpleOpenNI.SKEL_TORSO);
@@ -383,11 +383,11 @@ public class SkeletonOrientations {
 			return null;
 		}
 	}
-	public PVector getProportionedRightKnee(SimpleOpenNI context, int userId) {
+	
+	public PVector getProportionedRightKnee(SimpleOpenNI context, int userId, PVector right_hip) {
 		if (context.isTrackingSkeleton(userId) && this.directions.containsKey(SimpleOpenNI.SKEL_RIGHT_KNEE)) {
-			PVector right_hip = getProjectedPVector(context, userId, SimpleOpenNI.SKEL_RIGHT_HIP);
 			PVector right_knee = getProjectedPVector(context, userId, SimpleOpenNI.SKEL_RIGHT_KNEE);
-			PVector difference = PVector.sub(right_knee, right_hip);
+			PVector difference = PVector.sub(right_knee, getProjectedPVector(context, userId, SimpleOpenNI.SKEL_RIGHT_HIP));
 
 			return PVector.add(right_hip, PVector.mult(this.directions.get(SimpleOpenNI.SKEL_RIGHT_KNEE), difference.mag()));
 		}
@@ -395,11 +395,11 @@ public class SkeletonOrientations {
 			return null;
 		}
 	}
-	public PVector getProportionedRightFoot(SimpleOpenNI context, int userId) {
+	
+	public PVector getProportionedRightFoot(SimpleOpenNI context, int userId, PVector right_knee) {
 		if (context.isTrackingSkeleton(userId) && this.directions.containsKey(SimpleOpenNI.SKEL_RIGHT_FOOT)) {
-			PVector right_knee = getProjectedPVector(context, userId, SimpleOpenNI.SKEL_RIGHT_KNEE);
 			PVector right_foot = getProjectedPVector(context, userId, SimpleOpenNI.SKEL_RIGHT_FOOT);
-			PVector difference = PVector.sub(right_foot, right_knee);
+			PVector difference = PVector.sub(right_foot, getProjectedPVector(context, userId, SimpleOpenNI.SKEL_RIGHT_KNEE));
 
 			return PVector.add(right_knee, PVector.mult(this.directions.get(SimpleOpenNI.SKEL_RIGHT_FOOT), difference.mag()));
 		}

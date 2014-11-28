@@ -2,8 +2,10 @@
 package testkinect;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -19,7 +21,6 @@ public class ComparisonPApplet extends PApplet {
 	int count = 0;
 	public void setup() {
 
-		// TODO read model skeleton from a file
 		try {
 			BufferedReader br = new BufferedReader(new FileReader("inputData"));
 			String inputData;
@@ -40,7 +41,7 @@ public class ComparisonPApplet extends PApplet {
 		// enable skeleton generation for all joints
 		context.enableUser(SimpleOpenNI.SKEL_PROFILE_ALL);
 
-//		size(context.depthWidth(), context.depthHeight());
+		size(context.depthWidth(), context.depthHeight());
 	}
 
 	public void draw() {
@@ -54,7 +55,7 @@ public class ComparisonPApplet extends PApplet {
 			if (context.isTrackingSkeleton(i)) {
 				drawSkeleton(i);
 				drawLastSkeleton(i);
-				if (System.currentTimeMillis() - time >= 5000) {
+				if (System.currentTimeMillis() - time >= 100) {
 					System.out.println("in!!!");
 					if(count < readData.size()){
 						skeleton.fromInputData(readData.get(count));
@@ -74,26 +75,28 @@ public class ComparisonPApplet extends PApplet {
 		PVector torso = getJoint(userId, SimpleOpenNI.SKEL_TORSO);
 		
 		PVector neck = this.skeleton.getProportionedNeck(context, userId);
-		PVector head = this.skeleton.getProportionedHead(context, userId);
+		PVector head = this.skeleton.getProportionedHead(context, userId, neck);
 		
 		PVector leftShoulder = this.skeleton.getProportionedLeftShoulder(context, userId);
-		PVector leftElbow = this.skeleton.getProportionedLeftElbow(context, userId);
-		PVector leftHand = this.skeleton.getProportionedLeftHand(context, userId);
+		PVector leftElbow = this.skeleton.getProportionedLeftElbow(context, userId, leftShoulder);
+		PVector leftHand = this.skeleton.getProportionedLeftHand(context, userId, leftElbow);
 		PVector leftHip = this.skeleton.getProportionedLeftHip(context, userId);
-		PVector leftKnee = this.skeleton.getProportionedLeftKnee(context, userId);
-		PVector leftFoot = this.skeleton.getProportionedLeftFoot(context, userId);
+		PVector leftKnee = this.skeleton.getProportionedLeftKnee(context, userId, leftHip);
+		PVector leftFoot = this.skeleton.getProportionedLeftFoot(context, userId, leftKnee);
 
 		PVector rightShoulder = this.skeleton.getProportionedRightShoulder(context, userId);
-		PVector rightElbow = this.skeleton.getProportionedRightElbow(context, userId);
-		PVector rightHand = this.skeleton.getProportionedRightHand(context, userId);
+		PVector rightElbow = this.skeleton.getProportionedRightElbow(context, userId, rightShoulder);
+		PVector rightHand = this.skeleton.getProportionedRightHand(context, userId, rightElbow);
 		PVector rightHip = this.skeleton.getProportionedRightHip(context, userId);
-		PVector rightKnee = this.skeleton.getProportionedRightKnee(context, userId);
-		PVector rightFoot = this.skeleton.getProportionedRightFoot(context, userId);
+		PVector rightKnee = this.skeleton.getProportionedRightKnee(context, userId, rightHip);
+		PVector rightFoot = this.skeleton.getProportionedRightFoot(context, userId, rightKnee);
 		
 		stroke(204, 102, 0);
 		strokeWeight(5);
 		drawLimb(torso, neck);
 		drawLimb(neck, head);
+		drawLimb(leftShoulder, rightShoulder);
+		drawLimb(leftHip, rightHip);
 		
 		drawLimb(torso, leftShoulder);
 		drawLimb(leftShoulder, leftElbow);
@@ -221,5 +224,11 @@ public class ComparisonPApplet extends PApplet {
 			// Start pose detection
 			context.startPoseDetection("Psi", userId);
 		}
+	}
+	
+	@Override
+	public void destroy() {
+		context.close();
+		super.destroy();
 	}
 }

@@ -53,8 +53,10 @@ public class ComparisonGUI extends Applet implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		clearDisplayPanel();
+		
 		if (e.getSource() == calibrateButton) {
-			clearDisplayPanel();
+			System.out.println("calibrateButton: " + comparisonApplet);
 			if (comparisonApplet == null) {
 				System.out.println("initiating!");
 				comparisonApplet = new ComparisonPApplet();
@@ -62,9 +64,6 @@ public class ComparisonGUI extends Applet implements ActionListener {
 					System.out.println("null pointer!");
 				}
 				displayPanel.add(comparisonApplet);
-				// important to call this whenever embedding a PApplet.
-		        // It ensures that the animation thread is started and
-		        // that other internal variables are properly set.
 				comparisonApplet.init();
 			}
 			else {
@@ -77,8 +76,8 @@ public class ComparisonGUI extends Applet implements ActionListener {
 			validate();
 		}
 
-		if (e.getSource() == modelButton) {
-			clearDisplayPanel();
+		else if (e.getSource() == modelButton) {
+			System.out.println("modelButton: " + modelApplet);
 			if (modelApplet == null) {
 				System.out.println("initiating!");
 				modelApplet = new ModelInputPApplet();
@@ -95,10 +94,8 @@ public class ComparisonGUI extends Applet implements ActionListener {
 			validate();
 		}
 
-		if (e.getSource() == stopButton) {
-			clearDisplayPanel();
+		else if (e.getSource() == stopButton) {
 			displayPanel.add(placeholder);
-			
 			state = State.STOP;
 			stopAudio();
 			validate();
@@ -106,17 +103,17 @@ public class ComparisonGUI extends Applet implements ActionListener {
 	}
 	
 	private void clearDisplayPanel() {
-		if (state == State.MODELING) {
+		if (state == State.MODELING && modelApplet != null) {
+			System.out.println("Destroying model applet");
 			modelApplet.destroy();
 			modelApplet = null;
-//			applet.getAppletContext().showDocument(appletCloseURL);
+			System.out.println(modelApplet);
 		}
-		else if (state == State.CALIBRATING) {
-			comparisonApplet.stop();
+		else if (state == State.CALIBRATING && comparisonApplet != null) {
+			System.out.println("Destroying comparison applet");
+			comparisonApplet.destroy();
 			comparisonApplet = null;
-		}
-		else {
-			displayPanel.removeAll();
+			System.out.println(comparisonApplet);
 		}
 		displayPanel.removeAll();
 		validate();
